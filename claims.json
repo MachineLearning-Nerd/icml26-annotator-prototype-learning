@@ -1,0 +1,169 @@
+{
+  "paper": {
+    "arxiv_id": "2508.02123v1",
+    "arxiv_title": "Understanding the Essence: Delving into Annotator Prototype Learning for Multi-Class Annotation Aggregation",
+    "challenge_title": "Let the Prototype Guide You: Robust Aggregation of Sparse Multi-Class Annotations via Annotator Prototype Learning",
+    "openreview_id": "KJq0iScNM6",
+    "authors": [
+      "Ju Chen",
+      "Jun Feng",
+      "Shenyu Zhang"
+    ]
+  },
+  "verdict_policy": {
+    "VERIFIED": "The committed evidence satisfies the claim contract within the stated scope.",
+    "BLOCKED": "The evidence is informative but an exact paper-level attribution is prevented by a source or setup gap.",
+    "FALSIFIED": "The stated claim is contradicted by the pinned paper or an exact released setup."
+  },
+  "claims": [
+    {
+      "id": "C1",
+      "statement": "PTBCC models annotators through shared prototype confusion matrices and per-annotator distributions over those prototypes.",
+      "status": "VERIFIED",
+      "scope": "Reconstructed equations (7)-(14) plus exact-model synthetic recovery; this is not author-code equivalence.",
+      "paper_anchors": [
+        "Method, generative process, equations (7)-(14)"
+      ],
+      "production_path": [
+        "repro/src/run_ptbcc.py:fit_ptbcc",
+        "repro/src/run_ptbcc.py:synthetic_trial",
+        "outputs/full/learned_prototypes.csv",
+        "outputs/full/annotator_weights.csv",
+        "outputs/full/synthetic_recovery_trials.csv",
+        ".openresearch/artifacts/claim_1/independent_checker.json"
+      ],
+      "result": {
+        "synthetic_trials": 40,
+        "ptbcc_wins": 40,
+        "mean_matched_prototype_mae": 0.04175231402229045
+      }
+    },
+    {
+      "id": "C2",
+      "statement": "On Val5, PTBCC improves accuracy by 15 percentage points over the best reported baseline.",
+      "status": "VERIFIED",
+      "scope": "Exact Val5 domain and released DS reference baseline; the paper's PTBCC value is evaluated through the stated gain contract.",
+      "paper_anchors": [
+        "Table 2",
+        "Val5 case study"
+      ],
+      "production_path": [
+        "repro/src/run_ptbcc.py:load_paper_datasets",
+        "repro/src/reference_baselines.py:fit_published_ds",
+        "outputs/full/ground_truth_predictions.csv",
+        ".openresearch/artifacts/claim_2/raw_val5_result.json",
+        ".openresearch/artifacts/claim_2/independent_checker.json"
+      ],
+      "result": {
+        "ptbcc_accuracy": 0.56,
+        "best_baseline": "DS",
+        "best_baseline_accuracy": 0.41,
+        "gain_percentage_points": 15.0
+      }
+    },
+    {
+      "id": "C3",
+      "statement": "Across the exact 11 datasets, macro accuracy is PTBCC 0.7472, FGBCC 0.7175, BWA 0.7132, and MV 0.6986.",
+      "status": "BLOCKED",
+      "scope": "The cumulative evidence covers the full released 11-dataset domain and uses fractional tie credit.",
+      "paper_anchors": [
+        "Table 3",
+        "Table 4"
+      ],
+      "production_path": [
+        "repro/src/run_ptbcc.py:load_paper_datasets",
+        "repro/src/reference_baselines.py:fit_bwa",
+        "repro/src/reference_baselines.py:fit_fgbcc",
+        ".openresearch/artifacts/claim_3/raw_table4_results.json",
+        ".openresearch/artifacts/claim_3/independent_checker.json"
+      ],
+      "result": {
+        "paper": {
+          "MV": 0.6986,
+          "BWA": 0.7132,
+          "FGBCC": 0.7175,
+          "PTBCC": 0.7472
+        },
+        "observed": {
+          "MV": 0.6986047829354634,
+          "BWA": 0.7131502843580998,
+          "FGBCC": 0.7175816744032752,
+          "PTBCC": 0.7471525426567854
+        },
+        "blocker": "FGBCC rounds to 0.7176 rather than the paper's 0.7175; the paper does not release the PTBCC implementation or exact numerical environment."
+      }
+    },
+    {
+      "id": "C4",
+      "statement": "The 11-dataset PTBCC macro peaks at S=2 and is 0.7300 at S=3 and 0.7271 at S=4.",
+      "status": "BLOCKED",
+      "scope": "The initialization distinction and three deterministic audit seeds are recorded; the paper seed is absent.",
+      "paper_anchors": [
+        "Table 5",
+        "Number of Prototypes subsection"
+      ],
+      "production_path": [
+        "repro/src/run_ptbcc.py:fit_ptbcc",
+        "outputs/full/prototype_count_ablation.csv",
+        ".openresearch/artifacts/claim_4/raw_ablation.json",
+        ".openresearch/artifacts/claim_4/independent_checker.json"
+      ],
+      "result": {
+        "s2_peak_for_all_tested_seeds": true,
+        "tested_seeds": [
+          20260715,
+          20260716,
+          20260717
+        ],
+        "paper_values": {
+          "S2": 0.7472,
+          "S3": 0.73,
+          "S4": 0.7271
+        },
+        "blocker": "No tested seed reproduces both stochastic printed values, and the paper supplies no seed."
+      }
+    },
+    {
+      "id": "C5",
+      "statement": "PTBCC obtains about three percentage points higher macro accuracy using less than 10% of the running time of confusion-matrix-based methods.",
+      "status": "BLOCKED",
+      "scope": "Five process-isolated CPU repetitions were measured on the local stack; this is not the paper's reference machine.",
+      "paper_anchors": [
+        "Efficiency section",
+        "Figure 5"
+      ],
+      "production_path": [
+        "repro/src/run_ptbcc.py:process_isolated_benchmark",
+        ".openresearch/artifacts/claim_5/raw_runtime_benchmark.json",
+        ".openresearch/artifacts/claim_5/independent_checker.json",
+        "reports/ptbcc-claim-by-claim-2026-07-23/report.md"
+      ],
+      "result": {
+        "ptbcc_minus_fgbcc_accuracy_percentage_points": 2.9570868253510185,
+        "ptbcc_over_fgbcc_process_time_median": 0.22583830995526283,
+        "ptbcc_over_fgbcc_process_time_bootstrap_95_percent": [
+          0.20070747515053944,
+          0.22940634393510348
+        ],
+        "blocker": "The paper does not publish raw timings or define one aggregate denominator, and the local vectorized FGBCC/hardware differs from the paper setup."
+      }
+    }
+  ],
+  "catalog_claim_audit": [
+    {
+      "catalog_text": "CPBCC yields up to 26% accuracy improvement",
+      "status": "FALSIFIED",
+      "reason": "The pinned paper calls the method PTBCC and states up to 15%."
+    },
+    {
+      "catalog_text": "Average accuracy rises from 68.73% to 74.11% across 10 datasets",
+      "status": "FALSIFIED",
+      "reason": "The pinned paper's Table 4 is MV 0.6986 to PTBCC 0.7472 over 11 datasets."
+    },
+    {
+      "catalog_text": "Class-specific prototypes and annotator-specific weights",
+      "status": "SUPPORTED",
+      "reason": "The generative process and equations (7)-(14) define shared prototype matrices and annotator distributions over prototypes."
+    }
+  ]
+}

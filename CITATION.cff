@@ -1,0 +1,26 @@
+cff-version: 1.2.0
+message: "If you use this reproduction, please cite the paper and this repository."
+title: "ICML 2026 reproduction and claim audit for PTBCC"
+type: software
+authors:
+  - family-names: Jinjala
+    given-names: Dinesh
+    affiliation: MachineLearning-Nerd
+date-released: 2026-08-16
+repository-code: "https://github.com/MachineLearning-Nerd/icml26-annotator-prototype-learning"
+url: "https://github.com/MachineLearning-Nerd/icml26-annotator-prototype-learning"
+references:
+  - type: article
+    authors:
+      - family-names: Chen
+        given-names: Ju
+      - family-names: Feng
+        given-names: Jun
+      - family-names: Zhang
+        given-names: Shenyu
+    title: "Understanding the Essence: Delving into Annotator Prototype Learning for Multi-Class Annotation Aggregation"
+    year: 2025
+    url: "https://arxiv.org/abs/2508.02123"
+    identifiers:
+      - type: arxiv
+        value: "2508.02123"

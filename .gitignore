@@ -6,3 +6,5 @@ external/
 source/arxiv.tar
 source/*
 !source/Formatting-Instructions-LaTeX-2026.tex
+!source/arxiv/
+!source/arxiv/2508.02123.tar

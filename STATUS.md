@@ -1,25 +1,50 @@
-# STATUS — PTBCC (KJq0iScNM6)
+# PTBCC reproduction status
 
-**Session:** autoloop · **State:** under verdict · **Updated:** 2026-07-16
+**Audit date:** 2026-08-16
+**Collection status:** VERIFIED_SCOPED_WITH_LIMITATIONS
+**Repository target:** https://github.com/MachineLearning-Nerd/icml26-annotator-prototype-learning
 
-**Space:** https://huggingface.co/spaces/DineshAI/KJq0iScNM6  
-**Space commit:** `e57f7e6e348fea6c5a0467ca33f94375b5bf2623`  
-**GitHub:** https://github.com/MachineLearning-Nerd/icml26-repro-KJq0iScNM6-ptbcc  
-**Git commit:** `3a0f176`
+## Paper identity
+
+- arXiv v1: *Understanding the Essence: Delving into Annotator Prototype
+  Learning for Multi-Class Annotation Aggregation*
+- Challenge/OpenReview index: *Let the Prototype Guide You: Robust
+  Aggregation of Sparse Multi-Class Annotations via Annotator Prototype
+  Learning*
+- Authors: Ju Chen, Jun Feng, and Shenyu Zhang
+- Identifiers: arXiv 2508.02123v1 and OpenReview KJq0iScNM6
 
 ## Claims
 
-1. “CPBCC yields up to 26% accuracy improvement” — **falsified:** source says PTBCC and 15%; no 26%.
-2. “Boosts average accuracy from 68.73% to 74.11% across 10 datasets” — **falsified:** source says 69.86% → 74.72% across 11.
-3. “Models annotators through class-specific prototypes and annotator-specific weights” — **verified:** explicit reconstructed tensors/weights, 40/40 synthetic wins, six exact public datasets.
+| Claim | Verdict | Short reason |
+|---|---|---|
+| C1 architecture and synthetic recovery | VERIFIED | 40/40 exact-model trials improve over majority vote; prototype and worker distributions satisfy the tensor contracts. |
+| C2 Val5 headline gain | VERIFIED | PTBCC 0.56 versus DS 0.41, a 15.0 percentage-point difference. |
+| C3 Table 4 | BLOCKED | FGBCC reconstructs as 0.7175816744, which rounds to 0.7176 rather than 0.7175. |
+| C4 prototype ablation | BLOCKED | S=2 remains the peak in tested seeds; exact stochastic S=3/S=4 attribution is unavailable without the paper seed. |
+| C5 efficiency | BLOCKED | Controlled local PTBCC/FGBCC process-time ratio is 0.2258; paper timing inputs and denominator are not published. |
 
-## Current step
+## Catalog corrections
 
-Full CPU run completed in 76.1 seconds. Five tests pass. PTBCC macro accuracy
-is 79.31% vs majority vote 76.57% and Dawid–Skene 77.33%; generated-model
-recovery wins 40/40 trials with prototype MAE 0.04175.
+The catalog text attached to this repository is not treated as paper evidence:
 
-## Next
+1. “CPBCC yields up to 26%” is falsified by the paper source: the method is
+   PTBCC and the best-case statement is 15%.
+2. “Boosts average accuracy from 68.73% to 74.11% across 10 datasets” is
+   falsified by the source: Table 4 reports MV 0.6986, PTBCC 0.7472, over 11
+   datasets.
+3. The description of class-specific prototype matrices and annotator-specific
+   prototype weights is supported by the paper's generative process and
+   equations (7)--(14).
 
-Poll the official verdict. If any claim is inconclusive, revise only with new
-evidence and republish.
+## Evidence and rerun note
+
+The durable claim evidence is in .openresearch/artifacts/claim_1 through
+claim_5. The first runnable outputs/full snapshot contains six public
+datasets; the cumulative claim-verifier run recovered the exact 11-dataset
+corpus and preserved its raw evidence and provenance. See
+[CLAIM_EVIDENCE.md](CLAIM_EVIDENCE.md) for the distinction.
+
+The fixed rerun command and environment are in
+[ENVIRONMENT.md](ENVIRONMENT.md). The final publication-state verifier is
+[verify_final.py](verify_final.py).
